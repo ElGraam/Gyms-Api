@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  member: one
+  equipment_name: MyString
+  reservation_time: 2024-10-03 13:17:49
+
+two:
+  member: two
+  equipment_name: MyString
+  reservation_time: 2024-10-03 13:17:49
