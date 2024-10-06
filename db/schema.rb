@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_03_131749) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_06_115603) do
   create_table "equipment_reservations", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "member_id", null: false
     t.string "equipment_name", limit: 100, null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_03_131749) do
     t.bigint "membership_status_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "password_digest"
     t.index ["email"], name: "index_members_on_email", unique: true
     t.index ["membership_plan_id"], name: "index_members_on_membership_plan_id"
     t.index ["membership_status_id"], name: "index_members_on_membership_status_id"

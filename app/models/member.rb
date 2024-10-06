@@ -6,6 +6,9 @@ class Member < ApplicationRecord
   has_many :payments, dependent: :destroy
   has_many :equipment_reservations, dependent: :destroy
 
+
   validates :first_name, :last_name, :email, :join_date, presence: true
   validates :email, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+
+  has_secure_password
 end

@@ -38,6 +38,8 @@ member1 = Member.find_or_create_by!(email: "taro.yamada@example.com") do |member
   member.membership_plan = monthly_plan
   member.join_date = Date.today - 30
   member.membership_status = active_status
+  member.password = "01your_password"
+  member.password_confirmation = "01your_password"
 end
 
 member2 = Member.find_or_create_by!(email: "hanako.suzuki@example.com") do |member|
@@ -47,6 +49,8 @@ member2 = Member.find_or_create_by!(email: "hanako.suzuki@example.com") do |memb
   member.membership_plan = yearly_plan
   member.join_date = Date.today - 365
   member.membership_status = on_hold_status
+  member.password = "02your_password"
+  member.password_confirmation = "02your_password"
 end
 
 # 利用履歴の作成
