@@ -7,6 +7,8 @@ info:
   version: "1.0.0"
   description: "ジムのバックエンドで使用しているAPIの仕様書です。"
 tags:
+  - name: "login"
+    description: "認証関連"
   - name: "member"
     description: "会員関連"
   - name: "payment"
@@ -23,6 +25,32 @@ tags:
     description: "設備予約関連"
 
 paths:
+  /login:
+    post:
+      summary: "ログイン"
+      description: "会員がログインします。"
+      tags:
+        - "login"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionCreate"
+      responses:
+        200:
+          description: "ログイン成功時のレスポンス"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SessionSuccess"
+        401:
+          description: "認証失敗時のレスポンス"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /members:
     get:
       summary: "会員一覧取得"
@@ -35,9 +63,12 @@ paths:
           content:
             application/json:
               schema:
-                type: "array"
-                items:
-                  $ref: "#/components/schemas/Member"
+                type: "object"
+                properties:
+                  members:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/Member"
     post:
       summary: "会員作成"
       description: "新しい会員を作成します。"
@@ -230,24 +261,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/PaymentMethod"
-    post:
-      summary: "支払い方法作成"
-      description: "新しい支払い方法を作成します。"
-      tags:
-        - "payment_method"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PaymentMethodCreate"
-      responses:
-        201:
-          description: "作成成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaymentMethod"
 
   /payment_methods/{payment_method_id}:
     get:
@@ -270,46 +283,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PaymentMethod"
-    put:
-      summary: "支払い方法更新"
-      description: "指定されたpayment_method_idの支払い方法を更新します。"
-      tags:
-        - "payment_method"
-      parameters:
-        - name: "payment_method_id"
-          in: "path"
-          description: "更新する支払い方法のID"
-          required: true
-          schema:
-            type: "integer"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/PaymentMethodUpdate"
-      responses:
-        200:
-          description: "更新成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/PaymentMethod"
-    delete:
-      summary: "支払い方法削除"
-      description: "指定されたpayment_method_idの支払い方法を削除します。"
-      tags:
-        - "payment_method"
-      parameters:
-        - name: "payment_method_id"
-          in: "path"
-          description: "削除する支払い方法のID"
-          required: true
-          schema:
-            type: "integer"
-      responses:
-        204:
-          description: "削除成功時のレスポンス"
 
   /membership_plans:
     get:
@@ -326,24 +299,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/MembershipPlan"
-    post:
-      summary: "会員プラン作成"
-      description: "新しい会員プランを作成します。"
-      tags:
-        - "membership_plan"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MembershipPlanCreate"
-      responses:
-        201:
-          description: "作成成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MembershipPlan"
 
   /membership_plans/{membership_plan_id}:
     get:
@@ -366,46 +321,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MembershipPlan"
-    put:
-      summary: "会員プラン更新"
-      description: "指定されたmembership_plan_idの会員プランを更新します。"
-      tags:
-        - "membership_plan"
-      parameters:
-        - name: "membership_plan_id"
-          in: "path"
-          description: "更新する会員プランのID"
-          required: true
-          schema:
-            type: "integer"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MembershipPlanUpdate"
-      responses:
-        200:
-          description: "更新成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MembershipPlan"
-    delete:
-      summary: "会員プラン削除"
-      description: "指定されたmembership_plan_idの会員プランを削除します。"
-      tags:
-        - "membership_plan"
-      parameters:
-        - name: "membership_plan_id"
-          in: "path"
-          description: "削除する会員プランのID"
-          required: true
-          schema:
-            type: "integer"
-      responses:
-        204:
-          description: "削除成功時のレスポンス"
 
   /membership_statuses:
     get:
@@ -422,24 +337,6 @@ paths:
                 type: "array"
                 items:
                   $ref: "#/components/schemas/MembershipStatus"
-    post:
-      summary: "会員ステータス作成"
-      description: "新しい会員ステータスを作成します。"
-      tags:
-        - "membership_status"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MembershipStatusCreate"
-      responses:
-        201:
-          description: "作成成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MembershipStatus"
 
   /membership_statuses/{membership_status_id}:
     get:
@@ -462,46 +359,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MembershipStatus"
-    put:
-      summary: "会員ステータス更新"
-      description: "指定されたmembership_status_idの会員ステータスを更新します。"
-      tags:
-        - "membership_status"
-      parameters:
-        - name: "membership_status_id"
-          in: "path"
-          description: "更新する会員ステータスのID"
-          required: true
-          schema:
-            type: "integer"
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/MembershipStatusUpdate"
-      responses:
-        200:
-          description: "更新成功時のレスポンス"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/MembershipStatus"
-    delete:
-      summary: "会員ステータス削除"
-      description: "指定されたmembership_status_idの会員ステータスを削除します。"
-      tags:
-        - "membership_status"
-      parameters:
-        - name: "membership_status_id"
-          in: "path"
-          description: "削除する会員ステータスのID"
-          required: true
-          schema:
-            type: "integer"
-      responses:
-        204:
-          description: "削除成功時のレスポンス"
 
   /usage_histories:
     get:
@@ -709,6 +566,9 @@ components:
         last_name:
           type: "string"
           example: "Yamada"
+        username:
+          type: "string"
+          example: "taro_yamada"
         email:
           type: "string"
           example: "taro.yamada@example.com"
@@ -739,7 +599,10 @@ components:
       required:
         - first_name
         - last_name
+        - username
         - email
+        - password
+        - password_confirmation
         - membership_plan_id
         - join_date
         - membership_status_id
@@ -750,12 +613,21 @@ components:
         last_name:
           type: "string"
           example: "Yamada"
+        username:
+          type: "string"
+          example: "taro_yamada"
         email:
           type: "string"
           example: "taro.yamada@example.com"
         phone_number:
           type: "string"
           example: "090-1234-5678"
+        password:
+          type: "string"
+          example: "password123"
+        password_confirmation:
+          type: "string"
+          example: "password123"
         membership_plan_id:
           type: "integer"
           example: 1
@@ -776,6 +648,9 @@ components:
         last_name:
           type: "string"
           example: "Yamada"
+        username:
+          type: "string"
+          example: "taro_yamada_new"
         email:
           type: "string"
           example: "taro.yamada@example.com"
@@ -785,13 +660,15 @@ components:
         membership_plan_id:
           type: "integer"
           example: 1
-        join_date:
-          type: "string"
-          format: "date"
-          example: "2024-09-03"
         membership_status_id:
           type: "integer"
           example: 1
+        password:
+          type: "string"
+          example: "newpassword123"
+        password_confirmation:
+          type: "string"
+          example: "newpassword123"
 
     Payment:
       type: "object"
@@ -891,22 +768,6 @@ components:
           format: "date-time"
           example: "2024-10-03T22:56:03Z"
 
-    PaymentMethodCreate:
-      type: "object"
-      required:
-        - method_name
-      properties:
-        method_name:
-          type: "string"
-          example: "クレジットカード"
-
-    PaymentMethodUpdate:
-      type: "object"
-      properties:
-        method_name:
-          type: "string"
-          example: "銀行振込"
-
     MembershipPlan:
       type: "object"
       properties:
@@ -932,37 +793,6 @@ components:
           format: "date-time"
           example: "2024-10-03T22:56:03Z"
 
-    MembershipPlanCreate:
-      type: "object"
-      required:
-        - name
-        - price
-      properties:
-        name:
-          type: "string"
-          example: "月額"
-        price:
-          type: "number"
-          format: "decimal"
-          example: 10000.00
-        duration_in_days:
-          type: "integer"
-          example: 30
-
-    MembershipPlanUpdate:
-      type: "object"
-      properties:
-        name:
-          type: "string"
-          example: "月額"
-        price:
-          type: "number"
-          format: "decimal"
-          example: 10000.00
-        duration_in_days:
-          type: "integer"
-          example: 30
-
     MembershipStatus:
       type: "object"
       properties:
@@ -980,22 +810,6 @@ components:
           type: "string"
           format: "date-time"
           example: "2024-10-03T22:56:03Z"
-
-    MembershipStatusCreate:
-      type: "object"
-      required:
-        - status_name
-      properties:
-        status_name:
-          type: "string"
-          example: "アクティブ"
-
-    MembershipStatusUpdate:
-      type: "object"
-      properties:
-        status_name:
-          type: "string"
-          example: "休会中"
 
     UsageHistory:
       type: "object"
@@ -1113,3 +927,32 @@ components:
           format: "date-time"
           example: "2024-10-05T15:31:51Z"
 
+    SessionCreate:
+      type: "object"
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: "string"
+          example: "taro.yamada@example.com"
+        password:
+          type: "string"
+          example: "password123"
+
+    SessionSuccess:
+      type: "object"
+      properties:
+        message:
+          type: "string"
+          example: "ログイン成功"
+        token:
+          type: "string"
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    ErrorResponse:
+      type: "object"
+      properties:
+        error:
+          type: "string"
+          example: "認証に失敗しました"

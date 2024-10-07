@@ -1,4 +1,6 @@
 class MembersController < ApplicationController
+    skip_before_action :authenticate_request, only: [:create]
+
     before_action :set_member, only: [:show, :update, :destroy]
 
     # GET /members
@@ -19,7 +21,8 @@ class MembersController < ApplicationController
             return
         end            
         @member = Member.new(member_params)
-        
+        @member.join_date = Date.today
+
         if @member.save
             render json: @member, status: :created, location: @member
         else
@@ -54,10 +57,10 @@ class MembersController < ApplicationController
         params.require(:member).permit(
             :first_name,
             :last_name,
+            :username,
             :email,
             :phone_number,
             :membership_plan_id,
-            :join_date,
             :membership_status_id,
             :password,
             :password_confirmation

@@ -34,6 +34,7 @@ bank_transfer = PaymentMethod.find_or_create_by!(method_name: "銀行振込")
 member1 = Member.find_or_create_by!(email: "taro.yamada@example.com") do |member|
   member.first_name = "Taro"
   member.last_name = "Yamada"
+  member.username = "Yama"
   member.phone_number = "090-1234-5678"
   member.membership_plan = monthly_plan
   member.join_date = Date.today - 30
@@ -45,6 +46,7 @@ end
 member2 = Member.find_or_create_by!(email: "hanako.suzuki@example.com") do |member|
   member.first_name = "Hanako"
   member.last_name = "Suzuki"
+  member.username = "Hana"
   member.phone_number = "080-8765-4321"
   member.membership_plan = yearly_plan
   member.join_date = Date.today - 365
@@ -59,6 +61,11 @@ UsageHistory.find_or_create_by!(
   check_in_time: DateTime.now - 1.day,
   check_out_time: DateTime.now - 1.day + 1.hour
 )
+UsageHistory.find_or_create_by!(
+  member: member2,
+  check_in_time: DateTime.now - 10.day,
+  check_out_time: DateTime.now - 10.day + 1.hour
+)
 
 # 支払いの作成
 Payment.find_or_create_by!(
@@ -68,10 +75,22 @@ Payment.find_or_create_by!(
   payment_method: credit_card,
   membership_plan: monthly_plan
 )
+Payment.find_or_create_by!(
+  member: member2,
+  amount: 100000.00, 
+  payment_date: DateTime.now - 1.year,
+  payment_method: credit_card,
+  membership_plan: yearly_plan
+)
 
 # 設備予約の作成
 EquipmentReservation.find_or_create_by!(
   member: member1,
   equipment_name: "ランニングマシン1号機",
+  reservation_time: DateTime.now + 1.day
+)
+EquipmentReservation.find_or_create_by!(
+  member: member2,
+  equipment_name: "アームブラスター",
   reservation_time: DateTime.now + 1.day
 )
